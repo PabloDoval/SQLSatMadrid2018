@@ -1,0 +1,13 @@
+name: sqlsat18
+channels:
+- defaults
+dependencies:
+- python=3.6.0
+
+- pip:
+  - numpy
+  - tensorflow-gpu
+  - matplotlib
+  - keras
+  - jupyter
+  - azureml-sdk
