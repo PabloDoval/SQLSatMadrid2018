@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 from azureml.core import Workspace, Experiment
@@ -29,6 +30,7 @@ if __name__ == '__main__':
         "iterations": 20,
         "n_cross_validations": 5,
         "primary_metric": 'AUC_weighted',
+        "blacklist_algos" = ['kNN','LinearSVM'],
         "preprocess": False,
         "concurrent_iterations": 5,
         "verbosity": logging.INFO
@@ -36,12 +38,12 @@ if __name__ == '__main__':
 
     automl_config = AutoMLConfig(task = 'classification',
                              debug_log = 'automl_errors.log',
-                             path = './',
+                             path = '.',
                              compute_target = compute_target,
                              data_script = script_folder + '/get_data.py',
                              **automl_settings
                             )
 
     experiment = Experiment(workspace=workspace, name='fashionMNIST_autoML')
-    remote_run = experiment.submit(automl_config,   show_output=False)
+    remote_run = experiment.submit(automl_config, show_output=False)
     
