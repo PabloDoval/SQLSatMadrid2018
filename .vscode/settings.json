@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\pablo\\Anaconda3\\envs\\sqlsat18\\python.exe"
+    "python.pythonPath": "C:\\Users\\pablo\\Anaconda3\\envs\\sqlsat18\\python.exe",
+    "python.linting.enabled": false
 }

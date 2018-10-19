@@ -36,11 +36,12 @@ if __name__ == '__main__':
 
     automl_config = AutoMLConfig(task = 'classification',
                              debug_log = 'automl_errors.log',
-                             path = project_folder,
+                             path = './',
                              compute_target = compute_target,
-                             data_script = project_folder + "/get_data.py",
+                             data_script = script_folder + '/get_data.py',
                              **automl_settings
                             )
 
-    remote_run = experiment.submit(automl_config,   show_output = False)
+    experiment = Experiment(workspace=workspace, name='fashionMNIST_autoML')
+    remote_run = experiment.submit(automl_config,   show_output=False)
     
