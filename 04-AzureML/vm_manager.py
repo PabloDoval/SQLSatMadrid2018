@@ -28,8 +28,8 @@ class VMManager():
 
         return compute_target
 
-    def get_script_config(self, script_folder, entry_script, script_params, compute_target, data_path, channels=None, conda_packages=None, pip_packages=None):
-        run_config = self.__get_run_config(compute_target, data_path, channels, conda_packages, pip_packages)
+    def get_script_config(self, script_folder, entry_script, script_params, compute_target, channels=None, conda_packages=None, pip_packages=None):
+        run_config = self.__get_run_config(compute_target, channels, conda_packages, pip_packages)
         script_run_config = ScriptRunConfig(source_directory=script_folder, script=entry_script, arguments=script_params, run_config=run_config)
         return script_run_config
 
@@ -44,14 +44,7 @@ class VMManager():
 
         return compute_target
         
-    def __get_run_config(self, compute_target, data_path, channels=None, conda_packages=None, pip_packages=None):
-        data_store = self.__workspace.get_default_datastore()
-
-        data_reference = DataReferenceConfiguration(datastore_name=data_store.name, 
-                   path_on_datastore=data_path, 
-                   mode='download', # download files from datastore to compute target
-                   overwrite=True)
-        
+    def __get_run_config(self, compute_target, channels=None, conda_packages=None, pip_packages=None):
         # Load the "cpu-dsvm.runconfig" file (created by the above attach operation) in memory
         run_config = RunConfiguration(framework = "python")
 
@@ -64,11 +57,8 @@ class VMManager():
         # Ask system to provision a new one based on the conda_dependencies.yml file
         run_config.environment.python.user_managed_dependencies = False
 
-        # Set the data reference of the run configuration
-        run_config.data_references = { data_store.name: data_reference }
-
         # Prepare the Docker and conda environment automatically when used the first time.
-        run_config.prepare_environment = True
+        run_config.auto_prepare_environment = True
 
         # specify dependencies obj
         conda_dependencies = CondaDependencies.create(conda_packages=conda_packages, pip_packages=pip_packages)

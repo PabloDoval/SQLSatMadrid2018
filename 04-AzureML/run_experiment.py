@@ -28,8 +28,8 @@ if __name__ == '__main__':
     shutil.copy('model.py', script_folder)
 
     script_params = []
-    conda_libs = ['numpy', 'azureml-sdk[automl]', 'tensorflow']
-    experiment_config = compute_manager.get_script_config(script_folder, entry_script, script_params, compute_target, conda_packages=conda_libs)
+    pip_libs = ['numpy', 'azureml-sdk[automl]', 'tensorflow']
+    experiment_config = compute_manager.get_script_config(script_folder, entry_script, script_params, compute_target, pip_packages=pip_libs)
 
     print('Run experiment')
     experiment_name = 'fashionMNIST'
