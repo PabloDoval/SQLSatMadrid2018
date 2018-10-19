@@ -1,7 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
 from model import get_model_definition, save_model
-from train import train_model
 
 def train_model(model, train_images, train_labels, epochs=5):
     model.compile(optimizer=tf.train.AdamOptimizer(), 
