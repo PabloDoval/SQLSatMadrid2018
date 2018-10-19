@@ -2,6 +2,8 @@ import os
 import shutil
 from azureml.core import Workspace, Experiment
 from azureml.core.authentication import ServicePrincipalAuthentication
+from azureml.train.automl import AutoMLConfig
+from azureml.train.automl.run import AutoMLRun
 from batchai_manager import BatchAIManager
 
 if __name__ == '__main__': 
@@ -13,28 +15,32 @@ if __name__ == '__main__':
 
     # Compute Target
     compute_target_name = "fashionMNISTBAI"
-    
+
     workspace = Workspace.from_config(auth=servicePrincipalAuth)
     compute_manager = BatchAIManager(workspace)
     compute_target = compute_manager.get_or_create(compute_target_name)
 
     print('Prepare environment and code')
     script_folder = './training'
-    if (not os.path.exists(script_folder)):
-        os.makedirs(script_folder)    
-    entry_script = 'train.py'
-    shutil.copy(entry_script, script_folder)
-    shutil.copy('model.py', script_folder)
+    shutil.copy('get_data.py', script_folder)
+        
+    automl_settings = {
+        "max_time_sec": 120,
+        "iterations": 20,
+        "n_cross_validations": 5,
+        "primary_metric": 'AUC_weighted',
+        "preprocess": False,
+        "concurrent_iterations": 5,
+        "verbosity": logging.INFO
+    }
 
-    script_params = []
-    pip_libs = ['numpy', 'azureml-sdk[automl]', 'tensorflow']
-    experiment_config = compute_manager.get_script_config(script_folder, entry_script, script_params, compute_target, pip_packages=pip_libs)
+    automl_config = AutoMLConfig(task = 'classification',
+                             debug_log = 'automl_errors.log',
+                             path = project_folder,
+                             compute_target = compute_target,
+                             data_script = project_folder + "/get_data.py",
+                             **automl_settings
+                            )
 
-    print('Run experiment')
-    experiment_name = 'fashionMNIST_autoML'
-    experiment = Experiment(workspace=workspace, name=experiment_name)
-    run = experiment.submit(config=experiment_config)
-    run.wait_for_completion(show_output=True)
-
-    # Register model in workspace
-    run.register_model(model_name='fashionMNIST_autoML', model_path='./output/fashionMNIST_autoML')
+    remote_run = experiment.submit(automl_config,   show_output = False)
+    
