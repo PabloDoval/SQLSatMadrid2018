@@ -1,10 +1,9 @@
-from training.compute_target.base import BaseComputeTarget
 from azureml.core.compute import DsvmCompute, RemoteCompute
 from azureml.core.runconfig import RunConfiguration, DEFAULT_CPU_IMAGE
 from azureml.core.conda_dependencies import CondaDependencies
 from azureml.core import ScriptRunConfig
 
-class VMManager(BaseComputeTarget):
+class VMManager():
 
     def __init__(self, workspace):
         self.__workspace = workspace
@@ -12,7 +11,7 @@ class VMManager(BaseComputeTarget):
     def get_or_create(self, compute_name, vm_size):
         compute_target = self.__get_if_exist_compute_target(compute_name)
 
-        if (compute_target = None)
+        if (compute_target is None):
             print('Creating a new compute target...')
             vm_config = DsvmCompute.provisioning_configuration(vm_size=vm_size)
             compute_target = DsvmCompute.create(self.__workspace, name=compute_name, provisioning_configuration=vm_config)
@@ -23,7 +22,7 @@ class VMManager(BaseComputeTarget):
     def attach(self, compute_name, username, password, address):
         compute_target = self.__get_if_exist_compute_target(compute_name)
 
-        if (compute_target = None)
+        if (compute_target is None):
             compute_target = RemoteCompute.attach(self.__workspace, name=compute_name, username=params['username'], address=params['address'], password=params['password'])
             compute_target.wait_for_completion(show_output=True)
 
