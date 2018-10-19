@@ -1,4 +1,3 @@
-from azureml.core import Run
 import tensorflow as tf
 from tensorflow import keras
 from model import get_model_definition, save_model
@@ -11,10 +10,7 @@ def train_model(model, train_images, train_labels, epochs=5):
 
 def evaluate(model, test_images, test_labels):   
     test_loss, test_acc = model.evaluate(test_images, test_labels)
-    run = Run.get_context()
-    run.log('Accuracy', test_acc)
-    run.log('Loss', test_loss)
-
+    print('Test accuracy:', test_acc)
 
 def load_data():
     fashion_mnist = keras.datasets.fashion_mnist
@@ -43,9 +39,6 @@ if __name__ == '__main__':
 
     # Train model
     train_model(model, train_images, train_labels)
-
-    # Evaluate model
-    evaluate(model, test_images, test_labels)
 
     # Save model
     folderpath = './output/fashionMNIST'

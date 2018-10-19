@@ -2,7 +2,7 @@ import os
 import shutil
 from azureml.core import Workspace, Experiment
 from azureml.core.authentication import ServicePrincipalAuthentication
-from vm_manager import VMManager
+from batchai_manager import BatchAIManager
 
 if __name__ == '__main__': 
     # Security for the RBAC principal
@@ -12,12 +12,11 @@ if __name__ == '__main__':
     servicePrincipalAuth = ServicePrincipalAuthentication(tenant_id, client_id, client_secret)
 
     # Compute Target
-    compute_target_name = "fashionMNISTVM"
-    compute_size_vm = "Standard_D2_v2"
+    compute_target_name = "fashionMNISTBAI"
     
     workspace = Workspace.from_config(auth=servicePrincipalAuth)
-    compute_manager = VMManager(workspace)
-    compute_target = compute_manager.get_or_create(compute_target_name, vm_size=compute_size_vm)
+    compute_manager = BatchAIManager(workspace)
+    compute_target = compute_manager.get_or_create(compute_target_name)
 
     print('Prepare environment and code')
     script_folder = './training'
@@ -32,10 +31,10 @@ if __name__ == '__main__':
     experiment_config = compute_manager.get_script_config(script_folder, entry_script, script_params, compute_target, pip_packages=pip_libs)
 
     print('Run experiment')
-    experiment_name = 'fashionMNIST'
+    experiment_name = 'fashionMNIST_autoML'
     experiment = Experiment(workspace=workspace, name=experiment_name)
     run = experiment.submit(config=experiment_config)
     run.wait_for_completion(show_output=True)
 
     # Register model in workspace
-    run.register_model(model_name='fashionMNIST', model_path='./output/fashionMNIST')
+    run.register_model(model_name='fashionMNIST_autoML', model_path='./output/fashionMNIST_autoML')
