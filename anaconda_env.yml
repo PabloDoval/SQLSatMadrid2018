@@ -3,11 +3,11 @@ channels:
 - defaults
 dependencies:
 - python=3.6.0
+- tensorflow
+- matplotlib
+- keras
+- numpy
 
 - pip:
-  - numpy
-  - tensorflow-gpu
-  - matplotlib
-  - keras
   - jupyter
   - azureml-sdk
