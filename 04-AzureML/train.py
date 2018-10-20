@@ -48,6 +48,6 @@ if __name__ == '__main__':
     evaluate(model, test_images, test_labels)
 
     # Save model
-    folderpath = './output/fashionMNIST'
-    filename = 'model'
+    folderpath = './outputs/models'
+    filename = 'fashionMNIST'
     save_model(model, folderpath, filename)
