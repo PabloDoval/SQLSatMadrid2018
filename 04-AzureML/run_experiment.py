@@ -28,7 +28,7 @@ if __name__ == '__main__':
     shutil.copy('model.py', script_folder)
 
     script_params = []
-    pip_libs = ['numpy', 'azureml-sdk[automl]', 'tensorflow']
+    pip_libs = ['azureml-sdk[automl]', 'tensorflow', 'numpy']
     experiment_config = compute_manager.get_script_config(script_folder, entry_script, script_params, compute_target, pip_packages=pip_libs)
 
     print('Run experiment')
@@ -38,4 +38,4 @@ if __name__ == '__main__':
     run.wait_for_completion(show_output=True)
 
     # Register model in workspace
-    run.register_model(model_name='fashionMNIST', model_path='./output/fashionMNIST')
+    run.register_model(model_name='fashionMNIST', model_path='./outputs/models/fashionMNIST')
