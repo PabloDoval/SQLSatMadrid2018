@@ -14,10 +14,8 @@ def save_model(model, folderpath, filename):
     if (not os.path.exists(folderpath)):
         os.makedirs(folderpath)
     path = os.path.join(folderpath, filename)
-    model.save_weights(path)
+    model.save(path)
 
-def load_model(folderpath, filename):
-    model = get_model_definition()
-    path = os.path.join(folderpath, filename)
-    model.load_weights(path, by_name=False)
+def load_model(model_path):
+    model = keras.models.load_model(model_path)
     return model

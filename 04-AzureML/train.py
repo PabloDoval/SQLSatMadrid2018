@@ -49,5 +49,5 @@ if __name__ == '__main__':
 
     # Save model
     folderpath = './outputs/models'
-    filename = 'fashionMNIST'
+    filename = 'fashionMNIST.h5'
     save_model(model, folderpath, filename)
