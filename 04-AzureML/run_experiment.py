@@ -38,4 +38,4 @@ if __name__ == '__main__':
     run.wait_for_completion(show_output=True)
 
     # Register model in workspace
-    run.register_model(model_name='fashionMNIST', model_path='./outputs/models/fashionMNIST')
+    run.register_model(model_name='fashionMNIST', model_path='./outputs/models/fashionMNIST.h5')
